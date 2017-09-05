@@ -1,0 +1,42 @@
+#!/bin/bash
+
+SCRIPT=`basename $0`
+SCRIPTDIR="$(cd `dirname $0` && pwd)"
+OUTPUT=/dev/stdout
+
+# Exclude spaces from field separator, to make life easier when dealing with
+# filenames with spaces in them
+IFS="$(printf '\n\t')"
+
+# Import utility functions if exist
+# source "$SCRIPTDIR/common.sh"
+
+usage()
+{
+    echo "Usage: `basename $0` <file>"
+    echo 'returns the absolute path name of <file>'
+}
+
+while getopts "h" opt; do
+    case $opt in
+        h)
+        usage
+        exit 1
+        ;;
+        *)
+        usage
+        exit 1
+        ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+if [ "$#" != 1 ]; then
+    usage
+    exit 1
+fi
+
+FILE="$1"
+FILEDIR="$(cd `dirname $FILE` && pwd)"
+echo "$FILEDIR/"`basename "$FILE"`
